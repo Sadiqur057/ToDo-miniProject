@@ -54,7 +54,7 @@ const removeToDo = (key, elem) => {
   toDoElem.remove();
   let notifyContent = "";
   notifyContent += `<div class="alert alert-warning alert-dismissible fade show" role="alert">
-    <strong>Success!</strong> Your note has been deleted successfully from NoteBook.
+    <strong>Success!</strong> Your ToDo has been deleted successfully.
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>`;
   notify.innerHTML = notifyContent;
