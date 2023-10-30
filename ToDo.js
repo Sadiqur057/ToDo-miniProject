@@ -1,47 +1,71 @@
-const addToDo = () => {
-  let title = document.getElementById("todo-title").value;
-  let desc = document.getElementById("todo-desc").value;
-  let notify = document.getElementById("notification");
+let notify = document.getElementById("notification");
+const addToDo = async () => {
+  let title = await document.getElementById("todo-title").value;
+  let desc = await document.getElementById("todo-desc").value;
   let notifyContent = "";
+  let err = false;
+
+  // Checking for empty input
   if (!title || !desc) {
-    notifyContent += `
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    notifyContent += `<div class="alert alert-warning alert-dismissible fade show" role="alert">
             <strong>Error!</strong> Both field are required.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        `;
+        </div>`;
     notify.innerHTML = notifyContent;
-    return;
+    return (err = true);
   }
+
+  // Checking for existing title
   for (const key in localStorage) {
     if (localStorage.hasOwnProperty(key)) {
       if (key == title) {
-        notifyContent += `
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <strong>Error!</strong> Title already exist. Try another.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        `;
+        notifyContent += `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> Title already exist. Try another.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>`;
         notify.innerHTML = notifyContent;
-        return;
+        return (err = true);
       }
     }
   }
 
-  localStorage.setItem(title, desc);
-  displayToDO();
+  // if no error then save into localStorage of browser
+  if (err == false) {
+    localStorage.setItem(title, desc);
+    displayToDO();
+    notifyContent += `
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <strong>Success!</strong> ToDo added successfully.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          `;
+    notify.innerHTML = notifyContent;
+  }
+  document.getElementById("todo-title").value = "";
+  document.getElementById("todo-desc").value = "";
 };
+
+// Perform delete operation
 const removeToDo = (key, elem) => {
   localStorage.removeItem(key);
   toDoElem =
     elem.parentElement.parentElement.parentElement.parentElement.parentElement
-      .parentElement.parentElement;
+      .parentElement.parentElement.parentElement;
   toDoElem.remove();
+  let notifyContent = "";
+  notifyContent += `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Success!</strong> Your note has been deleted successfully from NoteBook.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>`;
+  notify.innerHTML = notifyContent;
 };
+
+// changes color marking done
 const MarkDone = (elem) => {
   elem.classList.toggle("bg-success");
 };
 
+// display all existing todo list
 let displayContainer = document.getElementById("displayContainer");
 const displayToDO = () => {
   let displayContent = "";
@@ -70,4 +94,3 @@ const displayToDO = () => {
   displayContainer.innerHTML = displayContent;
 };
 displayToDO();
-
