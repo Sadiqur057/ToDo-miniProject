@@ -4,19 +4,30 @@ const addToDo = () => {
   let notify = document.getElementById("notification");
   let notifyContent = "";
   if (!title || !desc) {
-    // Close the modal 
- 
-
-
     notifyContent += `
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             <strong>Error!</strong> Both field are required.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         `;
-       
+    notify.innerHTML = notifyContent;
+    return;
   }
-  notify.innerHTML = notifyContent;
+  for (const key in localStorage) {
+    if (localStorage.hasOwnProperty(key)) {
+      if (key == title) {
+        notifyContent += `
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> Title already exist. Try another.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        `;
+        notify.innerHTML = notifyContent;
+        return;
+      }
+    }
+  }
+
   localStorage.setItem(title, desc);
   displayToDO();
 };
@@ -30,7 +41,6 @@ const removeToDo = (key, elem) => {
 const MarkDone = (elem) => {
   elem.classList.toggle("bg-success");
 };
-
 
 let displayContainer = document.getElementById("displayContainer");
 const displayToDO = () => {
@@ -47,7 +57,7 @@ const displayToDO = () => {
                 <div class="col-sm-3 p-4">
                   <table>
                     <tr>
-                      <td><a href="#" class="btn  btn-primary mb-1" id="status" onclick="MarkDone(this)">Complete</a></td>
+                      <td><button  href="#" class="btn  btn-primary" onclick="MarkDone(this)">Complete</button></td>
                       <td><button type="button" class="btn btn-danger" onclick="removeToDo('${key}',this)">Remove</button></td>
                     </tr>
                   </table>
@@ -61,7 +71,3 @@ const displayToDO = () => {
 };
 displayToDO();
 
-
-// Close the modal by ID
-
-  
