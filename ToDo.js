@@ -9,6 +9,9 @@ const removeToDo=(key,elem)=>{
     toDoElem = elem.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;;
     toDoElem.remove()
 }
+const MarkDone = (elem) =>{
+    elem.classList.toggle('bg-success');
+}
 
 let displayContainer = document.getElementById("displayContainer");
 const displayToDO = () =>{
@@ -25,7 +28,7 @@ const displayToDO = () =>{
                 <div class="col-sm-3 p-4">
                   <table>
                     <tr>
-                      <td><a href="#" class="btn btn-primary mb-1">Complete</a></td>
+                      <td><a href="#" class="btn  btn-primary mb-1" id="status" onclick="MarkDone(this)">Complete</a></td>
                       <td><button type="button" class="btn btn-danger" onclick="removeToDo('${key}',this)">Remove</button></td>
                     </tr>
                   </table>
